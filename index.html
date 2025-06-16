@@ -1,0 +1,54 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Image Viewer</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            background: black;
+            overflow: hidden;
+            height: 100%;
+        }
+        img {
+            display: block;
+            margin: auto;
+            max-height: 100vh;
+            max-width: 100vw;
+        }
+    </style>
+</head>
+<body>
+    <img id="viewer" src="/images/1.jpg" alt="Image">
+    <script>
+        const images = ["1.jpg", "2.jpg", "3.jpg"];
+        let current = 0;
+        const viewer = document.getElementById("viewer");
+
+        document.body.addEventListener("touchstart", handleTouchStart, false);
+        document.body.addEventListener("touchend", handleTouchEnd, false);
+
+        let xStart = null;
+
+        function handleTouchStart(evt) {
+            xStart = evt.touches[0].clientX;
+        }
+
+        function handleTouchEnd(evt) {
+            if (!xStart) return;
+            let xEnd = evt.changedTouches[0].clientX;
+            let xDiff = xStart - xEnd;
+
+            if (xDiff > 50) {
+                current = (current + 1) % images.length;
+            } else if (xDiff < -50) {
+                current = (current - 1 + images.length) % images.length;
+            }
+            viewer.src = "/images/" + images[current];
+            xStart = null;
+        }
+    </script>
+</body>
+</html>
